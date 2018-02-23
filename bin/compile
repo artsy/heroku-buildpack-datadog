@@ -7,6 +7,10 @@ set -e
 # Debug
 # set -x
 
+# Deb options
+DEB="datadog-agent.deb"
+DD_AGENT_DEB="https://s3.amazonaws.com/apt.datadoghq.com/pool/d/da/datadog-agent_6.0.0~beta.9-1_amd64.deb"
+
 # Parse and derive params
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -69,7 +73,6 @@ apt-get $APT_OPTIONS -y --force-yes -d install --reinstall --no-install-recommen
 #   echo "Latest version is \"$DD_AGENT_VERSION\". To pin this version, run: heroku config:set DD_AGENT_VERSION=$DD_AGENT_VERSION" | indent
 # fi
 
-DEB=datadog-agent.deb
 wget $DD_AGENT_DEB -O $DEB
 dpkg -x $DEB $APT_DIR
 
