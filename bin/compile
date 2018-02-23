@@ -48,7 +48,7 @@ done
 topic "Installing Datadog Agent from deb source"
 apt-get $APT_OPTIONS -y --force-yes -d install --reinstall --no-install-recommends wget | indent
 
-wget $DD_AGENT_DEB -O $DEB
+wget -q $DD_AGENT_DEB -O $DEB
 dpkg -x $DEB $APT_DIR
 rm -f $DEB
 
