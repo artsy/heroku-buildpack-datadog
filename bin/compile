@@ -45,39 +45,12 @@ for DEP in ${DEP_PKGS[@]}; do
   dpkg -x $APT_CACHE_DIR/archives/$DEP\_*.deb $APT_DIR
 done
 
-# Install Datadog Agent
-# topic "Updating apt caches for Datadog Agent"
-# APT_OPTIONS="$APT_OPTIONS -o Dir::Etc::SourceList=$APT_REPO_FILE"
-# apt-get $APT_OPTIONS update | indent
-
 topic "Installing Datadog Agent from deb source"
 apt-get $APT_OPTIONS -y --force-yes -d install --reinstall --no-install-recommends wget | indent
 
-# apt-get $APT_OPTIONS -y --force-yes -d install --reinstall --no-install-recommends datadog-agent | indent
-
-# Use specific version if specified.
-# DPKG_STUB="$APT_CACHE_DIR/archives/datadog-agent_1%3a"
-# if [ -f $ENV_DIR/DD_AGENT_VERSION ]; then
-#   DD_AGENT_VERSION=$(cat $ENV_DIR/DD_AGENT_VERSION)
-#   echo "Installing pinned version \"$DD_AGENT_VERSION\"" | indent
-#   DEB=$(ls -t $DPKG_STUB$DD_AGENT_VERSION.deb | head -n 1)
-#   # Stop if we can't find the version.
-#   if [ -z "$DEB" ]; then
-#     topic "ERROR: Version \"$DD_AGENT_VERSION\" was not found."
-#     exit 1
-#   fi
-# else
-#   echo "No pinned version specified. Installing latest version." | indent
-#   DEB=$(ls -t $DPKG_STUB*.deb | head -n 1)
-#   DD_AGENT_VERSION=${DEB:${#DPKG_STUB}:(${#DEB}-${#DPKG_STUB}-4)}
-#   echo "Latest version is \"$DD_AGENT_VERSION\". To pin this version, run: heroku config:set DD_AGENT_VERSION=$DD_AGENT_VERSION" | indent
-# fi
-
 wget $DD_AGENT_DEB -O $DEB
 dpkg -x $DEB $APT_DIR
-
-# Rewrite package-config files
-# find $APT_DIR -type f -ipath '*/pkgconfig/*.pc' | xargs --no-run-if-empty -n 1 sed -i -e 's!^prefix=\(.*\)$!prefix='"$APT_DIR"'\1!g'
+rm -f $DEB
 
 # Install the runner
 topic "Installing Datadog runner"
